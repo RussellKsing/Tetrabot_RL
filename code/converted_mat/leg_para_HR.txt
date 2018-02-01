@@ -1,0 +1,1 @@
+{'rate_HR': array([[ 3.9]]), 'mid_HR': array([[ 3.04159265]]), '__version__': '1.0', '__header__': 'MATLAB 5.0 MAT-file, Platform: PCWIN64, Created on: Tue Apr 11 22:55:11 2017', '__globals__': []}
