@@ -16,7 +16,7 @@ def radian_transfer(t):
     # print_angle (t)
     while(t < 0 or t > 2*math.pi):
         # why is it subtracting pi and not 2pi?
-        t = t + 2*math.pi if t < 0 else t - math.pi
+        t = t + 2*math.pi if t < 0 else t - 2*math.pi
     # print_angle (t)
     return t
 
@@ -151,7 +151,7 @@ def matrix_multiply(*args):
 
 def frames_in_head(alpha, beta, hind):
     try: 
-        n = alpha.shape[1] + 1
+        n = alpha.shape[0] + 1
     except:
         n = 2
     # load data - what are these values?
