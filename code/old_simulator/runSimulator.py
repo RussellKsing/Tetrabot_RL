@@ -85,7 +85,7 @@ def runSimulator(dutyFactor, interPhi, meterPhi, outerPhi, c1 = 1., a2 = 0., c2 
     params.cFR = c4
 
     ######## CHANGE IT TO FALSE TO TURN OFF PLOTTING ########
-    params.ifPlot = True
+    params.ifPlot = False
 
 
     # Start to run the simulator with different duty_ind

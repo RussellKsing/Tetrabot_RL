@@ -307,7 +307,7 @@ def policyGradientTrain(t, episodes, epsilon, selfInit = False, object = 'Displa
     
     evalResults = evaluatePi(normalizePi(thePi, paramScaler), paramScaler)
     printEvaluation(thePi, evalResults, paramScaler)
-    sys.exit()
+    # sys.exit()
 
     savePi = [thePi]
     saveResults = [evalResults]
