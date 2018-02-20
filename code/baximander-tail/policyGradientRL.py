@@ -22,14 +22,16 @@ def initPramsVector(numParams = 11):
         # a1 = random.uniform(0, math.pi/3.)
         a2_1 = random.uniform(0, math.pi / 3.)
         a2_2 = random.uniform(0, math.pi / 3.)
+        a2_3 = random.uniform(0, math.pi / 3.)
         b1 = random.uniform(0, 2 * math.pi)
         b2_1 = random.uniform(0, 2 * math.pi)
         b2_2 = random.uniform(0, 2 * math.pi)
+        b2_3 = random.uniform(0, 2 * math.pi)
         c1 = random.uniform(-1., 1.)
         c2 = random.uniform(-1., 1.)
         c3 = random.uniform(-1., 1.)
         c4 = random.uniform(-1., 1.)
-        return (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, c2, b2_1, b2_2, c3, c4)
+        return (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, a2_3, c2, b2_1, b2_2, b2_3, c3, c4)
     else:
         return (dutyf, interPhi, meterPhi, outerPhi)
 
@@ -59,8 +61,8 @@ def normalizePi(oriPi, scaler):
     # Range = [dutyf, interPhi, meterPhi, outerPhi, c1, a2, c2, b2, c3, c4]
     paramsRange = [(0.5, 0.9),
                    (0, 2 * math.pi), (0, 2 * math.pi), (0, 2 * math.pi),
-                   (-1., 1.), (0, math.pi/3), (0, math.pi/3),
-                   (-1., 1.), (0, 2 * math.pi), (0, 2 * math.pi), (-1., 1.), (-1., 1.)]
+                   (-1., 1.), (0, math.pi/3), (0, math.pi/3), (0, math.pi/3),
+                   (-1., 1.), (0, 2 * math.pi), (0, 2 * math.pi), (0, 2 * math.pi), (-1., 1.), (-1., 1.)]
     scaledPi = []
     for i in range(len(oriPi)):
         paramRangeLength = paramsRange[i][1] - paramsRange[i][0]
@@ -73,8 +75,8 @@ def denormalizePi(scaledPi, scaler):
     # Range = [dutyf, interPhi, meterPhi, outerPhi, a1, a2, b1, b2, b3]
     paramsRange = [(0.5, 0.9),
                    (0, 2 * math.pi), (0, 2 * math.pi), (0, 2 * math.pi),
-                   (-1., 1.), (0, math.pi/3), (0, math.pi/3),
-                   (-1., 1.), (0, 2 * math.pi), (0, 2 * math.pi), (-1., 1.), (-1., 1.)]
+                   (-1., 1.), (0, math.pi/3), (0, math.pi/3), (0, math.pi/3),
+                   (-1., 1.), (0, 2 * math.pi), (0, 2 * math.pi), (0, 2 * math.pi), (-1., 1.), (-1., 1.)]
     oriPi = []
     for i in range(len(scaledPi)):
         paramRangeLength = paramsRange[i][1] - paramsRange[i][0]
@@ -83,10 +85,10 @@ def denormalizePi(scaledPi, scaler):
 
 
 def evaluatePi(thePi, scaler):
-    (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, c2, b2_1, b2_2, c3, c4) = denormalizePi(thePi, scaler)
+    (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, a2_3, c2, b2_1, b2_2, b2_3, c3, c4) = denormalizePi(thePi, scaler)
     # isStable = checkStable(dutyf, interPhi, meterPhi, outerPhi)
     (angleChange, displacement, unstablePercentage) = runSimulator(dutyf, interPhi, meterPhi, outerPhi,
-                                                   a2_1=a2_1, a2_2=a2_2, b2_1=b2_1, b2_2=b2_2, c1=c1, c2=c2, c3=c3, c4=c4)
+                                                   a2_1=a2_1, a2_2=a2_2, a2_3=a2_3, b2_1=b2_1, b2_2=b2_2, b2_3=b2_3, c1=c1, c2=c2, c3=c3, c4=c4)
     w_dis = 1
     w_angle = 3
     w_stable = 7
@@ -301,7 +303,7 @@ def policyGradientTrain(t, episodes, epsilon, selfInit = False, object = 'Displa
         thePi = initPramsVector(numParams=11)
         if (selfInit):
             thePi = selfInitParamsNew()
-        (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, c2, b2_1, b2_2, c3, c4) = thePi
+        (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, a2_3, c2, b2_1, b2_2, b2_3, c3, c4) = thePi
         if (checkStable(dutyf, interPhi, meterPhi, outerPhi)):
             break
 
@@ -391,23 +393,25 @@ def checkStoppingCreteria(savedResults, obj = 'Displacement'):
 
 def printEvaluation(thePi, evalResults, paramScaler):
     (angleChange, displacement, unstablePercentage, penaltiedScore) = evalResults
-    (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, c2, b2_1, b2_2, c3, c4) = thePi
+    (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, a2_3, c2, b2_1, b2_2, b2_3, c3, c4) = thePi
     print '------------------------------------------------------'
     print 'Parameters: '
-    print '    * Duty Factor: ', dutyf
-    print '    * interPhi: ', interPhi
-    print '    * meterPhi: ', meterPhi
-    print '    * outerPhi: ', outerPhi
-    #print '    * a1: ', a1
-    print '    * a2_1: ', a2_1
-    print '    * a2_2: ', a2_2
-    #print '    * b1: ',  b1
-    print '    * b2_1: ', b2_1
-    print '    * b2_2: ', b2_2
-    print '    * c_FL: ', c1
-    print '    * c_FR: ', c4
-    print '    * c_HL: ', c2
-    print '    * c_HR: ', c3
+    print '     dutyFactor =  ', dutyf
+    print '     interPhi =  ', interPhi
+    print '     meterPhi =  ', meterPhi
+    print '     outerPhi =  ', outerPhi
+    #print '     a1 =  ', a1
+    print '     a2_1 =  ', a2_1
+    print '     a2_2 =  ', a2_2
+    print '     a2_3 =  ', a2_3
+    #print '     b1 =  ',  b1
+    print '     b2_1 =  ', b2_1
+    print '     b2_2 =  ', b2_2
+    print '     b2_3 =  ', b2_3
+    print '     c1 =  ', c1
+    print '     c4 =  ', c4
+    print '     c2 =  ', c2
+    print '     c3 =  ', c3
 
     print
     print "Angle Change: " + str(angleChange) + " pi"
@@ -416,19 +420,21 @@ def printEvaluation(thePi, evalResults, paramScaler):
     print "Final Score: " + str(penaltiedScore) + '\n'
 
 def selfInitParamsNew():
-    dutyf =  0.87284995616
-    interPhi =  2.64996121189
-    meterPhi =  1.91151712179
-    outerPhi =  -1.82451108116
-    a2_1 =  0.668231307437
-    a2_2 =  1.668075117147
-    b2_1 =  1.68930306697
-    b2_2 =  0.41974015163
-    c1 =  -0.714751790867
-    c4 =  0.721353250046
-    c2 =  -1.02705950861
-    c3 =  0.684648404924
-    return (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, c2, b2_1, b2_2, c3, c4)
+    dutyFactor = 0.9
+    interPhi = 4.01212602265
+    meterPhi = 1.18943521037
+    outerPhi = -1.41714577328
+    a2_1 = 0.701045249749
+    a2_2 = 0.905461661386
+    a2_3 = 2.905461661386
+    b2_1 = 2.86276125191
+    b2_2 = 0.0474152993261
+    b2_3 = 0.5
+    c1 = -0.900959302491
+    c4 = 0.790483551065
+    c2 = -0.84577315574
+    c3 = 0.606085753847
+    return (dutyFactor, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, a2_3, c2, b2_1, b2_2, b2_3, c3, c4)
 
 
 def selfInitParams():
@@ -450,7 +456,8 @@ def selfInitParams():
     b2_1 = 2.48508330853#random.uniform(0, 2 * math.pi)
     a2_2 = 0.825796303018#random.uniform(0, math.pi / 3.)
     b2_2 = 2.48508330853#random.uniform(0, 2 * math.pi)
-
+    a2_3 = 0
+    b2_3 = 0
 
     c1 = -random.uniform(-0.2, 1) # cFL
     c2 = -random.uniform(-0.2, 1) # cHL
@@ -480,7 +487,7 @@ def selfInitParams():
     * b3:  0
     '''
 
-    return (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, c2, b2_1, b2_2, c3, c4)
+    return (dutyf, interPhi, meterPhi, outerPhi, c1, a2_1, a2_2, a2_3, c2, b2_1, b2_2, b2_3, c3, c4)
 
 policyGradientTrain(t=30, episodes=80, epsilon=0.001, selfInit = True, object = 'AngleChange', stepSize = 0.5, paramScaler = 7)
 

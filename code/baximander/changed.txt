@@ -1,0 +1,15 @@
+variables needed to be changed:
+1. N and hind from 3 to 4
+2. bodyContact from [1.2, 1.2, 0, 0] to [1.2, 1.2, 1.2, 0]
+3. alphaFunc from np.array([fct(params, t), 0.,0.]) to np.array([fct(params, t, 0), fct(params, t, 1), 0.])
+4. d_alhaFunc from return np.array([(fct(params, t + 0.01) - fct(params, t))/0.01, 0., 0.])
+to return np.array([(fct(params, t + 0.01, 0) - fct(params, t, 0))/0.01, (fct(params, t + 0.01, 1) - fct(params, t, 1))/0.01, 0.])
+5. F from np.array([-4.5 * math.sin(params.slope * math.pi/180.), 0, 0]) to F = np.array([-9 * math.sin(params.slope * math.pi/180.), 0, 0]) - doesn't really matter since the slope is zero
+6. In the center of mass function - update the code for number of links
+
+
+In the policy gradient file, change the following,
+1. selfInit function - change the variables
+2. normalizePi
+3. denormalizePi
+4. evaluatePi 

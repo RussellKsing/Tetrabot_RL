@@ -58,7 +58,7 @@ def runSimulatorOri():
 
     #sio.savemat('duty_factor.mat', {'dutyf': dutyf_save})
 
-def runSimulator(dutyFactor, interPhi, meterPhi, outerPhi, c1 = 1., a2_1 = 0., a2_2 = 0., c2 = 1., b2_1 = 0., b2_2 = 0., c3 = 1., c4 = 1., printResult = False):
+def runSimulator(dutyFactor, interPhi, meterPhi, outerPhi, c1 = 1., a2_1 = 0., a2_2 = 0., a2_3 = 0., c2 = 1., b2_1 = 0., b2_2 = 0., b2_3 = 0., c3 = 1., c4 = 1., printResult = False):
     # Init all the parameters
     class Struct(object): pass
     params = Struct()
@@ -71,12 +71,12 @@ def runSimulator(dutyFactor, interPhi, meterPhi, outerPhi, c1 = 1., a2_1 = 0., a
     params.meterPhi = meterPhi
     params.outerPhi = outerPhi
 
-    params.a2 = [a2_1, a2_2]
-    params.b2 = [b2_1, b2_2]
+    params.a2 = [a2_1, a2_2, a2_3]
+    params.b2 = [b2_1, b2_2, b2_3]
 
-    params.b1 = [0., 0.]
-    params.a1 = [0., 0.]
-    params.a3 = [0., 0.]
+    params.b1 = [0., 0., 0.]
+    params.a1 = [0., 0., 0.]
+    params.a3 = [0., 0., 0.]
 
     # turnning scaler for beta (leg angle)
     params.cFL = c1
@@ -85,7 +85,7 @@ def runSimulator(dutyFactor, interPhi, meterPhi, outerPhi, c1 = 1., a2_1 = 0., a
     params.cFR = c4
 
     ######## CHANGE IT TO FALSE TO TURN OFF PLOTTING ########
-    params.ifPlot = False
+    params.ifPlot = True
 
 
     # Start to run the simulator with different duty_ind
@@ -167,8 +167,7 @@ def runSimulator(dutyFactor, interPhi, meterPhi, outerPhi, c1 = 1., a2_1 = 0., a
 #      c3 =  0.684648404924,
 #      printResult = False)
 
-
-# mid-way simulation episode 18 - looks good
+# alpha2 = 0
 runSimulator(
     dutyFactor = 0.9,
      interPhi = 4.01212602265,
@@ -176,14 +175,35 @@ runSimulator(
      outerPhi = -1.41714577328,
      a2_1 = 0.701045249749,
      a2_2 = 0.905461661386,
+     a2_3 = 2.5,
      b2_1 = 2.86276125191,
      b2_2 = 0.0474152993261,
+     b2_3 = 0.5,
      c1 = -0.900959302491,
      c4 = 0.790483551065,
      c2 = -0.84577315574,
      c3 = 0.606085753847,
-    printResult = True
+    printResult = False
     )
+
+# mid-way simulation episode 18 - looks good
+# runSimulator(
+#     dutyFactor =   0.890579599126,
+#      interPhi =   4.74009290177,
+#      meterPhi =   0.145939537205,
+#      outerPhi =   -0.0426641691804,
+#      a2_1 =   0.796399083116,
+#      a2_2 =   0.848591398732,
+#      a2_3 =   2.82634109627,
+#      b2_1 =   4.77613175603,
+#      b2_2 =   1.1049991791,
+#      b2_3 =   0.518174831952,
+#      c1 =   -0.814722213588,
+#      c4 =   0.904086508033,
+#      c2 =   -0.068065407553,
+#      c3 =   0.899353933873,
+#     printResult = False
+#     )
 
 # runSimulator(
 #     dutyFactor =  0.806335494787,

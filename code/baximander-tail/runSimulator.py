@@ -85,7 +85,7 @@ def runSimulator(dutyFactor, interPhi, meterPhi, outerPhi, c1 = 1., a2 = 0., c2 
     params.cFR = c4
 
     ######## CHANGE IT TO FALSE TO TURN OFF PLOTTING ########
-    params.ifPlot = True
+    params.ifPlot = False
 
 
     # Start to run the simulator with different duty_ind
@@ -97,10 +97,10 @@ def runSimulator(dutyFactor, interPhi, meterPhi, outerPhi, c1 = 1., a2 = 0., c2 
 
     return (angleChange, displacement, unstablePenalty)
 
-runSimulator(dutyFactor= 0.825596618927,
-             interPhi=2.30325491293, meterPhi=3.02684850655, outerPhi=-1.12931199084,
-             a2=0.640345443569, b2=2.87237958421,
-             c1 = -0.661868934101, c2 = -0.966094411428, c3 = 0.677950475621, c4 = 0.253750011962,
-             printResult=True)
+# runSimulator(dutyFactor= 0.825596618927,
+#              interPhi=2.30325491293, meterPhi=3.02684850655, outerPhi=-1.12931199084,
+#              a2=0.640345443569, b2=2.87237958421,
+#              c1 = -0.661868934101, c2 = -0.966094411428, c3 = 0.677950475621, c4 = 0.253750011962,
+#              printResult=False)
 
 
