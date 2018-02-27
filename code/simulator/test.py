@@ -22,7 +22,7 @@ def test_1():
     g, gFL, gFR, gHL, gHR = frames_in_head(alpha, beta, hind)
     # sys.exit()
     print("\nFunction frames_in_head: ")
-    pprint("\ng: ", g)
+    print("\ng: ", g)
     print("\n gFL: ", gFL)
     # gFL =
 
