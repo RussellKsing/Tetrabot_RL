@@ -174,43 +174,19 @@ def fct(params, t, i):
 def drawActiveFrameSnake(g, alpha, beta, hind, L, Lleg, activation, colorSpace):
     n = alpha.shape[0] + 1
     [k, gFR, gFL, gHR, gHL] = framesInHead(alpha, beta, hind, L, Lleg)
-    # pprint (g)
-    # pprint (k)
-    # pprint (gFR)
-    # pprint (gFL)
-    # pprint (gHR)
-    # pprint (gHL)
-    # sys.exit()
 
     gFR = np.dot(g, gFR,)
     gFL = np.dot(g, gFL)
     gHL = np.dot(g, gHL)
     gHR = np.dot(g, gHR)
 
-    # pprint (g)
-    # pprint (k)
-    # pprint (gFR)
-    # pprint (gFL[0, 2])#, gFL[1, 2])
-    # pprint (gHR)
-    # pprint (gHL)
-    # sys.exit()
-
-    # k[0] = g
     for i in xrange(0, n):
         k[i] = np.dot(g, k[i])
-    # k[n-1] = np.dot(g, k[n-1])
-    # print (k)
+
     massCenter, linksCenter = computeCOM(k, activation[:4])
-    # print (massCenter)
-    # print (linksCenter)
+
     endPoints = computeEND(k, L, activation[:4])
     
-
-    # print (endPoints)
-    # sys.exit()
-
-    # print (massCenter[0])
-    # sys.exit()
     posFL = (gFL[0, 2], gFL[1, 2])
     posFR = (gFR[0, 2], gFR[1, 2])
     posHL = (gHL[0, 2], gHL[1, 2])
@@ -221,9 +197,6 @@ def drawActiveFrameSnake(g, alpha, beta, hind, L, Lleg, activation, colorSpace):
     curPos = (posFR, posFL, posHL, posHR)
     curAct = (activation[4], activation[5], activation[7], activation[6])
 
-    # pprint (curPos)
-    # pprint (curAct)
-    # sys.exit()
     # Get the list of legs that on the ground / in the air
     # legsOnGround_x - the x coordinate of the legs on ground
     # legsInAir_x - previous x coordinate of the legs in the air?
@@ -236,12 +209,6 @@ def drawActiveFrameSnake(g, alpha, beta, hind, L, Lleg, activation, colorSpace):
             legsInAir_x += [curPos[i][0]]
             legsInAir_y += [curPos[i][1]]
 
-    # pprint (legsOnGround_x)
-    # pprint (legsOnGround_y)
-    # pprint (legsInAir_x)
-    # pprint (legsInAir_y)
-    # sys.exit()
-    # Check stability
     stablePenaltyScore = checkStability(legsOnGround_x, legsOnGround_y, posMass)
 
     # pprint (stablePenaltyScore)
@@ -281,9 +248,6 @@ def computeEND(k, L, activation):
         end_matrix[i] = np.dot(k[i], np.linalg.inv(F))
 
     end_matrix[numlinks] = np.dot(k[i], F)
-    # pprint (end_matrix)
-    # pprint (end_matrix[0, 0, 2])
-    # sys.exit()
 
     for i in xrange(0, numlinks+1):
         comlist.append(end_matrix[i, 0:2, 2])
@@ -395,73 +359,18 @@ def get_config(g_leg, beta, xi, alpha, leg_act, blackred):
             slip = slip + norm(g_leg[1][:2, 2] - HR[:2, 3])
 
         leg_act = [0, 0, 0, 0] + leg_act
+        er=0.1; n=4;
+        gf = cell[0,5]
 
-    return gh, g_leg, xi, slip    
+        gh[0] = G(xi[0],xi[1],xi[2]);
+        gh[1] = np.dot(np.dot(np.dot(gh[0], F(l_a)), R(alpha[0])), F(l_b/4))
+        gh[2] = np.dot(gh[1], F(l_b/2))
+        gh[3] = np.dot(np.dot(np.dot(np.dot(gh[2], F(l_b/4))), R(alpha[1])), F(l_a))
 
-function [h, gh, g_leg, xi, slip]=get_config(g_leg,beta,alpha,xi,leg_act,colorSpace)
-load('robot_para.mat')
+        # ??
+        h = cell[0, 12]
 
-
-
-
-
-
-leg_act=[0 0 0 0 leg_act];
-er=0.1;n=4;
-gh=cell(1,5);
-gh{1}=g(xi(1),xi(2),xi(3));
-gh{2}=gh{1}*F(l_a)*R(alpha(1))*F(l_b/4);
-gh{3}=gh{2}*F(l_b/2);
-gh{4}=gh{3}*F(l_b/4)*R(alpha(2))*F(l_a);
-
-h=cell(1,13);
-
-for i =[ 1 4 ]
-    color = colorSpace(90+round(10*leg_act(i)),:);
-    h{i} = drawActiveFrameEllipse(gh{i},l_a,er,color);
-end
-for i = [ 2 3]
-    color = colorSpace(90+round(10*leg_act(i)),:);
-    h{i} = drawActiveFrameEllipse(gh{i},l_b/4,er,color);
-end
-color = colorSpace(90+round(10*leg_act(i)),:);
-
-h{13} = drawActiveFrameEllipse(gh{4}*F(l_b/4)*R(alpha(3))*F(l_a*4),l_a,er,color);
-
-er=1;
-color = colorSpace(90+round(54*leg_act(n+1)),:);
-h{n+1} = drawActiveFrameEllipse(g_leg{1},l_a/5,er,color);
-color = colorSpace(90+round(54*leg_act(n+2)),:);
-h{n+2} = drawActiveFrameEllipse(g_leg{2},l_a/5,er,color);
-color = colorSpace(90+round(54*leg_act(n+3)),:);
-h{n+3} = drawActiveFrameEllipse(g_leg{3},l_a/5,er,color);
-color = colorSpace(90+round(54*leg_act(n+4)),:);
-h{n+4} = drawActiveFrameEllipse(g_leg{4},l_a/5,er,color);
-sqs=[1 2;1 3;1 4;2 3;2 4;3 4];
-line_ind=1;
-for sqs_ind=1:6
-    ind_1=sqs(sqs_ind,1)+4;
-    ind_2=sqs(sqs_ind,2)+4;
-    if leg_act(ind_1)*leg_act(ind_2)==1
-        x1=g_leg{ind_1-4}(1:2,3);
-        x2=g_leg{ind_2-4}(1:2,3);
-        xx=[x1(1),x2(1)];
-        yy=[x1(2),x2(2)];
-        h{n+4+line_ind}=line(xx,yy);
-        line_ind=line_ind+1;
-    end
-end
-CoM=getCoM(gh,g_leg,leg_act,alpha(3));
-beta=linspace(0,2*pi,101);
-e_x=l_a/5*cos(beta);
-e_y=l_a/5*sin(beta);
-e_p=[e_x;e_y];
-
-h{12} = patch(CoM(1)+e_p(1,:),CoM(2)+e_p(2,:),[0 0 1],'linewidth',1);
-
-end
-
-    return g_leg, xi, slip
+    return gh, g_leg, xi, slip
 
 if __name__ == '__main__':
     class Struct(object): pass
